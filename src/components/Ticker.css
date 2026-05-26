@@ -1,0 +1,77 @@
+/* ============================================================
+   TICKER — infinite horizontal marquee
+   Lives at section level so it spans full viewport width naturally.
+   No breakout hacks needed.
+   ============================================================ */
+
+.ticker {
+  width: 100%;
+  overflow: hidden;
+  border-top:    1px solid rgba(240, 235, 224, 0.10);
+  border-bottom: 1px solid rgba(240, 235, 224, 0.10);
+  padding: 10px 0;
+  margin-top: 3.5rem;
+}
+
+.ticker__row {
+  overflow: hidden;
+  padding: 4px 0;
+}
+
+/* ── Scrolling track ──────────────────────────────────────
+   Two identical sets (original + duplicate).
+   Total width = 2× one set.  translateX(-50%) = one full set.
+   ──────────────────────────────────────────────────────── */
+.ticker__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  white-space: nowrap;
+  animation: ticker-scroll var(--spd-d, 35s) linear infinite;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0);    }
+  to   { transform: translateX(-50%); }
+}
+
+.ticker__set {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ticker__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  flex-shrink: 0;
+  padding-right: 0.5rem;
+}
+
+.ticker__text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: rgba(240, 235, 224, 0.70);
+}
+
+.ticker__gap {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(240, 235, 224, 0.20);
+  padding: 0 0.75rem;
+}
+
+/* ── Mobile speed override ── */
+@media (max-width: 768px) {
+  .ticker__track {
+    animation-duration: var(--spd-m, 25s);
+  }
+
+  .ticker__label,
+  .ticker__text,
+  .ticker__gap {
+    font-size: 0.68rem;
+  }
+}

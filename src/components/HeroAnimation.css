@@ -1,0 +1,183 @@
+/* ============================================================
+   HERO ANIMATION v3 — CSS keyframes only, no SMIL.
+   SVG viewBox 400×280. Plays once, fades at 4.2 s.
+   Scaled to a subtle background size via transform on the scene group.
+   ============================================================ */
+
+/* ── Root SVG: fills hero, stays behind text ── */
+.ha3-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* ── Scene: scaled to ~40% so stickman reads as background detail ── */
+.ha3-scene {
+  opacity: 0.18;
+  /* Scale down and push to lower-left quadrant so it never competes with text */
+  transform-box: view-box;
+  transform-origin: 30% 75%;
+  transform: scale(0.42);
+  animation: ha3-scene-out 1s ease-in 4.2s 1 forwards;
+}
+
+@keyframes ha3-scene-out {
+  to { opacity: 0; }
+}
+
+/* ============================================================
+   PHASE 1 (0 s – 1.6 s): WALK IN
+   ============================================================ */
+.ha3-stickman {
+  animation:
+    ha3-walk-in  1.6s linear   0s   1 forwards,
+    ha3-sit-body 0.6s ease-out 1.6s 1 forwards;
+}
+
+@keyframes ha3-walk-in {
+  from { transform: translateX(-160px); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes ha3-sit-body {
+  from { transform: translateY(0); }
+  to   { transform: translateY(10px); }
+}
+
+/* Left leg — pivot at top-right of bbox (hip point 200,130) */
+.ha3-leg-l {
+  transform-box: fill-box;
+  transform-origin: 100% 0%;
+  animation: ha3-walk-l 0.5s linear 0s 3 both;
+}
+
+@keyframes ha3-walk-l {
+  0%, 100% { transform: rotate(-20deg); }
+  50%      { transform: rotate(20deg);  }
+}
+
+/* Right leg — pivot at top-left of bbox */
+.ha3-leg-r {
+  transform-box: fill-box;
+  transform-origin: 0% 0%;
+  animation: ha3-walk-r 0.5s linear 0s 3 both;
+}
+
+@keyframes ha3-walk-r {
+  0%, 100% { transform: rotate(20deg);  }
+  50%      { transform: rotate(-20deg); }
+}
+
+/* ── Walking legs out, seated legs in at 1.6 s ── */
+.ha3-walk-legs {
+  animation: ha3-fade-out 0.35s ease-out 1.6s 1 forwards;
+}
+
+@keyframes ha3-fade-out {
+  to { opacity: 0; }
+}
+
+.ha3-sit-legs {
+  opacity: 0;
+  animation: ha3-fade-in 0.35s ease-out 1.6s 1 forwards;
+}
+
+@keyframes ha3-fade-in {
+  to { opacity: 1; }
+}
+
+/* Seated leg draw-on — L-shapes, ~60 SVG units each */
+.ha3-sit-leg-l {
+  stroke-dasharray: 62;
+  stroke-dashoffset: 62;
+  animation: ha3-draw 0.45s ease-out 1.65s 1 forwards;
+}
+
+.ha3-sit-leg-r {
+  stroke-dasharray: 62;
+  stroke-dashoffset: 62;
+  animation: ha3-draw 0.45s ease-out 1.75s 1 forwards;
+}
+
+/* Arms pivot toward laptop */
+.ha3-arm-l {
+  transform-box: fill-box;
+  transform-origin: 100% 0%;
+  animation: ha3-arm-l-fwd 0.45s ease-out 1.6s 1 forwards;
+}
+
+@keyframes ha3-arm-l-fwd {
+  to { transform: rotate(18deg); }
+}
+
+.ha3-arm-r {
+  transform-box: fill-box;
+  transform-origin: 0% 0%;
+  animation: ha3-arm-r-fwd 0.45s ease-out 1.6s 1 forwards;
+}
+
+@keyframes ha3-arm-r-fwd {
+  to { transform: rotate(-12deg); }
+}
+
+/* ============================================================
+   PHASE 3 (2.2 s – 3.0 s): DESK + LAPTOP DRAW ON
+   ============================================================ */
+
+/* Desk: (160,130)→(280,130) = 120 units */
+.ha3-desk {
+  stroke-dasharray: 121;
+  stroke-dashoffset: 121;
+  animation: ha3-draw 0.4s ease-out 2.2s 1 forwards;
+}
+
+/* Laptop base rect: perimeter 2*(70+8) = 156 */
+.ha3-laptop-base {
+  stroke-dasharray: 157;
+  stroke-dashoffset: 157;
+  animation: ha3-draw 0.3s ease-out 2.65s 1 forwards;
+}
+
+/* Laptop screen polyline ≈ 116 units total */
+.ha3-laptop-screen {
+  stroke-dasharray: 118;
+  stroke-dashoffset: 118;
+  animation: ha3-draw 0.4s ease-out 2.95s 1 forwards;
+}
+
+@keyframes ha3-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ============================================================
+   PHASE 4 (3.0 s – 4.2 s): TYPING DOTS — 2 pulses each
+   ============================================================ */
+.ha3-dot1,
+.ha3-dot2,
+.ha3-dot3 {
+  opacity: 0;
+}
+
+.ha3-dot1 { animation: ha3-dot 0.55s ease-in-out 3.0s  2 forwards; }
+.ha3-dot2 { animation: ha3-dot 0.55s ease-in-out 3.15s 2 forwards; }
+.ha3-dot3 { animation: ha3-dot 0.55s ease-in-out 3.3s  2 forwards; }
+
+@keyframes ha3-dot {
+  0%, 100% { opacity: 0; }
+  35%, 65% { opacity: 1; }
+}
+
+/* ============================================================
+   MOBILE (≤ 768 px) — scale slightly smaller, keep lower-left
+   ============================================================ */
+@media (max-width: 768px) {
+  .ha3-scene {
+    transform-origin: 20% 80%;
+    transform: scale(0.32);
+  }
+}
