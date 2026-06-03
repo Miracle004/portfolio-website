@@ -1,14 +1,12 @@
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import Reveal from './Reveal';
 import './Contact.css';
 
-// ─────────────────────────────────────────────────────────────
-// Web3Forms — zero-account setup:
-//   1. Visit https://web3forms.com
-//   2. Enter "officialtosin16@gmail.com" → check email → copy key
-//   3. Paste the key below. That's it.
-// ─────────────────────────────────────────────────────────────
-const W3F_ACCESS_KEY = 'YOUR_ACCESS_KEY'; // ← paste here
+
+const EJS_SERVICE  = 'service_0rshjk6';   // e.g. 'portfolio_service'
+const EJS_TEMPLATE = 'template_binqpxv';  // e.g. 'template_abc123'
+const EJS_KEY      = '6XRJ_u22qQ81GD0R7';   // e.g. 'aBcDeFgHiJkL'
 
 export default function Contact() {
   const [fromEmail, setFromEmail] = useState('');
@@ -28,27 +26,19 @@ export default function Contact() {
     setStatus('sending');
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key:  W3F_ACCESS_KEY,
-          from_name:   'Portfolio Contact',
-          email:       fromEmail,
-          message:     message,
-          subject:     'New message from portfolio',
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        setStatus('sent');
-        setFromEmail('');
-        setMessage('');
-      } else {
-        setStatus('error');
-      }
+      await emailjs.send(
+        EJS_SERVICE,
+        EJS_TEMPLATE,
+        {
+          from_name: 'Portfolio Contact',
+          email:     fromEmail,
+          message:   message,
+        },
+        EJS_KEY,
+      );
+      setStatus('sent');
+      setFromEmail('');
+      setMessage('');
     } catch {
       setStatus('error');
     }
